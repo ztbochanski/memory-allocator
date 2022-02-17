@@ -24,8 +24,8 @@ void print_data(void)
   while (b != NULL)
   {
     // Uncomment the following line if you want to see the pointer values
-    printf("[%p:%d,%s]", b, b->size, b->in_use ? "used" : "free");
-    // printf("[%d,%s]", b->size, b->in_use ? "used" : "free");
+    // printf("[%p:%d,%s]", b, b->size, b->in_use ? "used" : "free");
+    printf("[%d,%s]", b->size, b->in_use ? "used" : "free");
     if (b->next != NULL)
     {
       printf(" -> ");
@@ -39,8 +39,6 @@ void print_data(void)
 
 void *myalloc(int size)
 {
-  struct block *current, *previous;
-
   // request a chunk of memory from the OS
   if (head == NULL)
   {
@@ -50,37 +48,25 @@ void *myalloc(int size)
     head->in_use = 0;
   }
 
+  // pad user input to maintain alignment
+  int padded_request_size = PADDED_SIZE(size);
+  int padded_block_size = PADDED_SIZE(sizeof(struct block));
+
   // set current node in linked list to the start of the sbrk
-  current = head;
+  struct block *current_node = head;
 
   // keep traversing to the first open block!
-  while (((current->next) != NULL) && (((current->in_use) == 1) || ((current->size) < size)))
+  while (current_node != NULL)
   {
+    if (!current_node->in_use && current_node->size >= padded_request_size)
+    {
+      current_node->in_use = 1;
+      return PTR_OFFSET(current_node, padded_block_size);
+    }
     // move pointer to next block
-    previous = current;
-    current = current->next;
+    current_node = current_node->next;
   }
-
-  // required size perfectly fits
-  if (size == (current->size))
-  {
-    current->in_use = 1;
-  }
-  // required size less than available in block
-  else if (size < (current->size))
-  {
-    current->in_use = 1;
-  }
-  // required size larger than what is available, can't fit
-  else
-  {
-    return NULL;
-  }
-
-  // return pointer at start of data
-  unsigned long padded_block_size;
-  padded_block_size = PADDED_SIZE(sizeof(struct block));
-  return PTR_OFFSET(current, padded_block_size);
+  return NULL;
 }
 
 int main()
