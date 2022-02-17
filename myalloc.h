@@ -8,4 +8,6 @@ struct block
   struct block *next;
 };
 
+void *myalloc(int size);
+
 #endif
