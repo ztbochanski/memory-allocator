@@ -119,7 +119,7 @@ void *myalloc(int size)
   return NULL;
 }
 
-int main()
+void test_run1()
 {
   void *p;
 
@@ -128,4 +128,46 @@ int main()
 
   myfree(p);
   print_data();
+}
+
+void test_run2()
+{
+  myalloc(10);
+  print_data();
+  myalloc(20);
+  print_data();
+  myalloc(30);
+  print_data();
+  myalloc(40);
+  print_data();
+  myalloc(50);
+  print_data();
+}
+
+void test_run3()
+{
+  void *p;
+
+  myalloc(10);
+  print_data();
+  p = myalloc(20);
+  print_data();
+  myalloc(30);
+  print_data();
+  myfree(p);
+  print_data();
+  myalloc(40);
+  print_data();
+  myalloc(10);
+  print_data();
+}
+
+int main()
+{
+  printf("\nRUN 1:\n");
+  test_run1();
+  printf("\nRUN 2:\n");
+  test_run2();
+  printf("\nRUN 3:\n");
+  test_run3();
 }
