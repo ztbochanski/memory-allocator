@@ -64,8 +64,10 @@ void split_space(struct block *current_node, int padded_request_size, int padded
 
 void myfree(void *pointer)
 {
-  struct block *current = pointer;
-  current->in_use = 0;
+  struct block *node = pointer;
+  // pre-decrement by type size to point to node start
+  --node;
+  node->in_use = 0;
 }
 
 void *myalloc(int size)
