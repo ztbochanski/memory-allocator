@@ -64,9 +64,7 @@ void split_space(struct block *current_node, int padded_request_size, int padded
 
 void myfree(void *pointer)
 {
-  struct block *node = pointer;
-  // pre-decrement by type size to point to node start
-  --node;
+  struct block *node = PTR_OFFSET(pointer, -PADDED_SIZE(sizeof(struct block)));
   node->in_use = 0;
 }
 
