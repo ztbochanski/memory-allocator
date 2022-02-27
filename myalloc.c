@@ -49,17 +49,16 @@ void print_data(void)
 //    |-----------------1008------------------------| <- remaining space: head.size
 // |-----------------1024---------------------------| <- total sbrk
 
-void split_space(struct block *current_node, int padded_request_size, int padded_block_size, int required_space)
+void split_space(struct block *current_node, int padded_request_size)
 {
-  if (current_node->size >= required_space)
-  {
-    // new node with remaining unused space
-    struct block *new_node = current_node + padded_block_size + padded_request_size;
-    new_node->size = current_node->size - padded_block_size - padded_request_size;
-    // point current node to new node and set size
-    current_node->next = new_node;
-    current_node->size = padded_request_size;
-  }
+  int padded_block_size = PADDED_SIZE(sizeof(struct block));
+  struct block *new_node = PTR_OFFSET(current_node, padded_request_size + padded_block_size);
+  new_node->size = current_node->size - padded_block_size - padded_request_size;
+  current_node->size = padded_request_size;
+  new_node->in_use = 0;
+
+  new_node->next = current_node->next;
+  current_node->next = new_node;
 }
 
 void myfree(void *pointer)
@@ -99,12 +98,7 @@ void *myalloc(int size)
   {
     if (!current_node->in_use && current_node->size >= padded_request_size)
     {
-      // split node if enough space
-      int required_space = padded_request_size + padded_block_size + 16;
-      if (current_node->size >= required_space)
-      {
-        split_space(current_node, padded_request_size, padded_block_size, required_space);
-      }
+      split_space(current_node, padded_request_size);
 
       // mark in use return pointer to current space
       current_node->in_use = 1;
@@ -162,10 +156,10 @@ void test_run3()
 
 int main()
 {
-  printf("\nRUN 1:\n");
-  test_run1();
-  printf("\nRUN 2:\n");
-  test_run2();
+  // printf("\nRUN 1:\n");
+  // test_run1();
+  // printf("\nRUN 2:\n");
+  // test_run2();
   printf("\nRUN 3:\n");
   test_run3();
 }
