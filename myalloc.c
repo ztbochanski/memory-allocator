@@ -70,14 +70,13 @@ void myfree(void *pointer)
   // traverse singly linked list O(n)
   while (node->next != NULL)
   {
-    if (node->in_use == 0 && node->next->in_use == 0)
+    if (!node->in_use && !node->next->in_use)
     {
-      printf("node not in use %d\n", node->size);
-      printf("next node also not in use %d\n", node->next->size);
+      node->size += node->next->size + PADDED_SIZE(sizeof(struct block));
 
-      node->size = node->size + node->next->size;
-      printf("joined size %lu\n", node->size + PADDED_SIZE(sizeof(struct block)));
-
+      printf("cur node %p\n", node);
+      printf("next node %p\n", node->next);
+      printf("new next node %p\n", node->next->next);
       node->next = node->next->next;
     }
     node = node->next;
@@ -173,6 +172,14 @@ void split_test_run3()
 
 void coalesce_test1()
 {
+  // 0 bytes      32 bytes
+  // b1  -------> b2 --------> NULL
+  // v            v
+  // |--16--|-10-6|--16--|------976--------|
+  // |-----32-----|-----------992----------|
+  // b1    | |                 | |
+  // v     v v coalesce blocks v v
+  // |--16--|-------------1008-------------|
   void *p;
 
   p = myalloc(10);
