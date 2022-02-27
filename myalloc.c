@@ -77,6 +77,8 @@ void myfree(void *pointer)
 
       node->size = node->size + node->next->size;
       printf("joined size %lu\n", node->size + PADDED_SIZE(sizeof(struct block)));
+
+      node->next = node->next->next;
     }
     node = node->next;
   }
