@@ -70,11 +70,12 @@ void myfree(void *pointer)
   // traverse singly linked list O(n)
   while (node->next != NULL)
   {
-    // if node ! in_use && node->next ! in_use:
-    // join blocks
-    // move pointer to next node
+    if (node->in_use == 0 && node->next->in_use == 0)
+    {
+      printf("node not in use %d\n", node->size);
+      printf("next node also not in use %d\n", node->next->size);
+    }
     node = node->next;
-    printf("node\n");
   }
 }
 
