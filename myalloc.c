@@ -74,6 +74,9 @@ void myfree(void *pointer)
     {
       printf("node not in use %d\n", node->size);
       printf("next node also not in use %d\n", node->next->size);
+
+      node->size = node->size + node->next->size;
+      printf("joined size %lu\n", node->size + PADDED_SIZE(sizeof(struct block)));
     }
     node = node->next;
   }
