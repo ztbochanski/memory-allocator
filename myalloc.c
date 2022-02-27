@@ -193,6 +193,21 @@ void coalesce_test1()
   print_data();
 }
 
+void coalesce_test2()
+{
+  void *p, *q;
+
+  p = myalloc(10);
+  print_data();
+  q = myalloc(20);
+  print_data();
+
+  myfree(p);
+  print_data();
+  myfree(q);
+  print_data();
+}
+
 int main()
 {
   // -----------
@@ -208,6 +223,8 @@ int main()
   // --------------
   // COALESCE TESTS
   // --------------
-  printf("\nCOALESCE RUN 1:\n");
-  coalesce_test1();
+  // printf("\nCOALESCE RUN 1:\n");
+  // coalesce_test1();
+  printf("\nCOALESCE RUN 2:\n");
+  coalesce_test2();
 }
