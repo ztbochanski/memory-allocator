@@ -74,12 +74,7 @@ void myfree(void *pointer)
     if (!node->in_use && !node->next->in_use)
     {
       node->size += node->next->size + PADDED_SIZE(sizeof(struct block));
-
-      printf("cur node %p\n", node);
-      printf("next node %p\n", node->next);
-      printf("next next node %p\n", node->next->next);
       node->next = node->next->next;
-      printf("new next node now %p\n", node->next);
     }
     else
     {
@@ -209,6 +204,44 @@ void coalesce_test2()
   print_data();
 }
 
+void coalesce_test3()
+{
+  void *p, *q;
+
+  p = myalloc(10);
+  print_data();
+  q = myalloc(20);
+  print_data();
+
+  myfree(q);
+  print_data();
+  myfree(p);
+  print_data();
+}
+
+void coalesce_test4()
+{
+  void *p, *q, *r, *s;
+
+  p = myalloc(10);
+  print_data();
+  q = myalloc(20);
+  print_data();
+  r = myalloc(30);
+  print_data();
+  s = myalloc(40);
+  print_data();
+
+  myfree(q);
+  print_data();
+  myfree(p);
+  print_data();
+  myfree(s);
+  print_data();
+  myfree(r);
+  print_data();
+}
+
 int main()
 {
   // -----------
@@ -228,4 +261,8 @@ int main()
   // coalesce_test1();
   printf("\nCOALESCE RUN 2:\n");
   coalesce_test2();
+  printf("\nCOALESCE RUN 3:\n");
+  coalesce_test3();
+  printf("\nCOALESCE RUN 4:\n");
+  coalesce_test4();
 }
