@@ -111,7 +111,7 @@ void *myalloc(int size)
   return NULL;
 }
 
-void test_run1()
+void split_test_run1()
 {
   void *p;
 
@@ -122,7 +122,7 @@ void test_run1()
   print_data();
 }
 
-void test_run2()
+void split_test_run2()
 {
   myalloc(10);
   print_data();
@@ -136,7 +136,7 @@ void test_run2()
   print_data();
 }
 
-void test_run3()
+void split_test_run3()
 {
   void *p;
 
@@ -154,12 +154,32 @@ void test_run3()
   print_data();
 }
 
+void coalesce_test1()
+{
+  void *p;
+
+  p = myalloc(10);
+  print_data();
+
+  myfree(p);
+  print_data();
+}
+
 int main()
 {
-  // printf("\nRUN 1:\n");
+  // -----------
+  // SPLIT TESTS
+  // -----------
+  // printf("\nSPLIT RUN 1:\n");
   // test_run1();
-  // printf("\nRUN 2:\n");
+  // printf("\nSPLIT RUN 2:\n");
   // test_run2();
-  printf("\nRUN 3:\n");
-  test_run3();
+  // printf("\nSPLIT RUN 3:\n");
+  // test_run3();
+
+  // --------------
+  // COALESCE TESTS
+  // --------------
+  printf("\nCOALESCE RUN 1:\n");
+  coalesce_test1();
 }
