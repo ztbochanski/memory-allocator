@@ -63,8 +63,19 @@ void split_space(struct block *current_node, int padded_request_size)
 
 void myfree(void *pointer)
 {
+  // set block that passed-in address points to as free
   struct block *node = PTR_OFFSET(pointer, -PADDED_SIZE(sizeof(struct block)));
   node->in_use = 0;
+
+  // traverse singly linked list O(n)
+  while (node->next != NULL)
+  {
+    // if node ! in_use && node->next ! in_use:
+    // join blocks
+    // move pointer to next node
+    node = node->next;
+    printf("node\n");
+  }
 }
 
 void *myalloc(int size)
