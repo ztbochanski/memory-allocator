@@ -76,10 +76,14 @@ void myfree(void *pointer)
 
       printf("cur node %p\n", node);
       printf("next node %p\n", node->next);
-      printf("new next node %p\n", node->next->next);
+      printf("next next node %p\n", node->next->next);
       node->next = node->next->next;
+      printf("new next node now %p\n", node->next);
     }
-    node = node->next;
+    else
+    {
+      node = node->next;
+    }
   }
 }
 
