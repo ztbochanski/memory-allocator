@@ -67,8 +67,8 @@ void myfree(void *pointer)
   struct block *node = PTR_OFFSET(pointer, -PADDED_SIZE(sizeof(struct block)));
   node->in_use = 0;
 
+  // traverse singly linked list starting at the head of the list=> O(n)
   node = head;
-  // traverse singly linked list O(n)
   while (node->next != NULL)
   {
     if (!node->in_use && !node->next->in_use)
